@@ -70,7 +70,7 @@ end
 function M.get_icon_color(name, ext, opts)
     local icon, hl = M.get_icon(name, ext, opts)
     local hex = vim.api.nvim_get_hl(0, { name = hl}).fg
-    return hex
+    return icon, hex
 end
 
 return M
