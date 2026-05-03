@@ -35,16 +35,13 @@ function M.has_loaded()
 end
 
 function M.get_icon(name, ext, opts)
-    local stem = ""
-    local pre = name:match("^([^%.]*)")
-    if pre and pre ~= "" then
-        stem = pre
-    else
+    local stem, _ext = name:match("^(.+)%.([^%.]+)$")
+    if not stem then
         stem = name
     end
 
-    if not ext or ext == "" then
-        ext = "NO_EXT"
+    if not _ext then
+        _ext = "NO_EXT"
     end
 
     local lt = M.lookup
@@ -52,8 +49,8 @@ function M.get_icon(name, ext, opts)
         return lt.stem[stem].icon, lt.stem[stem].hl
     elseif lt.name[name] then
         return lt.name[name].icon, lt.name[name].hl
-    elseif lt.ext[ext] then
-        return lt.ext[ext].icon, lt.ext[ext].hl
+    elseif lt.ext[_ext] then
+        return lt.ext[_ext].icon, lt.ext[_ext].hl
     else
         return nil, nil
     end
