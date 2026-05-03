@@ -13,11 +13,6 @@ function M.setup(opts)
 end
 
 function M.load()
-    -- sub web-devicons
-    if not vim.g.loaded_easy_icons then
-        package.loaded["nvim-web-devicons"] = require("easy-icons")
-    end
-
     -- build lut
     for kind, items in pairs(M.config) do
         if M.lookup[kind] then
