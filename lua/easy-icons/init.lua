@@ -40,9 +40,12 @@ function M.has_loaded()
 end
 
 function M.get_icon(name, ext, opts)
+    if ext == "lua" then
+        return "X", "#000000"
+    end
+
     local stem = ""
     local pre = name:match("^(.*)%.")
-
     if pre and pre ~= "" then
         stem = pre
     else
@@ -56,10 +59,13 @@ function M.get_icon(name, ext, opts)
     local lt = M.lookup
     if lt.stem[stem] then
         return lt.stem[stem].icon, lt.stem[stem].hl
+
     elseif lt.name[name] then
         return lt.name[name].icon, lt.name[name].hl
+
     elseif lt.ext[ext] then
         return lt.ext[ext].icon, lt.ext[ext].hl
+
     else
         return nil, nil
     end
