@@ -9,6 +9,7 @@ M.lookup = {
 
 function M.setup(opts)
     M.config = opts
+    M.load()
 end
 
 function M.load()
