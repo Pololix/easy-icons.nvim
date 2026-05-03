@@ -29,8 +29,6 @@ function M.load()
                 end
                 M.lookup[kind][entry] = desc
             end
-        else
-            vim.notify
         end
     end
 
