@@ -49,6 +49,10 @@ function M.get_icon(name, ext, opts)
         stem = name
     end
 
+    if not ext or ext == "" then
+        ext = "NO_EXT"
+    end
+
     local lt = M.lookup
     if lt.stem[stem] then
         return lt.stem[stem].icon, lt.stem[stem].hl
