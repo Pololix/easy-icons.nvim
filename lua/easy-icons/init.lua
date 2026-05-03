@@ -50,13 +50,10 @@ function M.get_icon(name, ext, opts)
     local lt = M.lookup
     if lt.stem[stem] then
         return lt.stem[stem].icon, lt.stem[stem].hl
-
     elseif lt.name[name] then
         return lt.name[name].icon, lt.name[name].hl
-
     elseif lt.ext[ext] then
         return lt.ext[ext].icon, lt.ext[ext].hl
-
     else
         return nil, nil
     end
@@ -64,7 +61,13 @@ end
 
 function M.get_icon_color(name, ext, opts)
     local icon, hl = M.get_icon(name, ext, opts)
-    local hex = vim.api.nvim_get_hl(0, { name = hl}).fg
+    if not hl then
+        return icon, nil
+    end
+
+    local hi = vim.api.nvim_get_hl(0, { name = hl, link = false })
+    local hex = hi.fg and string.format("#%06x", hi.fg) or nil
+
     return icon, hex
 end
 
