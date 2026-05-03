@@ -22,10 +22,15 @@ function M.load()
     for kind, items in pairs(M.config) do
         if M.lookup[kind] then
             for entry, desc in pairs(items) do
+                if type(desc.hl) == "string" and desc.hl:match("^#%x%x%x%x%x%x") then
+                    local name = "EasyIcons" .. entry
+                    vim.api.nvim_set_hl(0, name, { fg = desc.hl })
+                    desc.hl = name
+                end
                 M.lookup[kind][entry] = desc
             end
         else
-            --warn
+            vim.notify
         end
     end
 
