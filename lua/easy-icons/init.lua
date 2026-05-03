@@ -1,12 +1,11 @@
 local M = {}
 
+M.status = false
 M.config = {}
 M.lookup = {
-    filestem  = {},
-    filename  = {},
-    extension = {},
-    -- dir      = {},
-    -- lsp      = {}
+    stem = {},
+    name = {},
+    ext  = {},
 }
 
 function M.setup(opts)
@@ -27,27 +26,34 @@ function M.load()
             --warn
         end
     end
+
+    M.status = true
 end
 
 function M.has_loaded()
-    return true
+    return M.status
 end
 
 function M.get_icon(name, ext, opts)
-    local stem = name:match("^(.*)%.")
+    local stem = ""
+    local pre = name:match("^(.*)%.")
 
-    if stem and M.lookup.filestem[stem] then
-        return M.lookup.filestem[stem].icon, M.lookup.filestem[stem].hl
-
-    elseif M.lookup.filename[name] then
-        return M.lookup.filename[name].icon, M.lookup.filename[name].hl
-
-    elseif ext and M.lookup.extension[ext] then
-        return M.lookup.extension[ext].icon, M.lookup.extension[ext].hl
-
+    if pre and pre ~= "" then
+        stem = pre
     else
-       return nil, nil
-   end
+        stem = name
+    end
+
+    local lt = M.lookup
+    if lt.stem[stem] then
+        return lt.stem[stem].icon, lt.stem[stem].hl
+    elseif lt.name[name] then
+        return lt.name[name].icon, lt.name[name].hl
+    elseif lt.ext[ext] then
+        return lt.ext[ext].icon, lt.ext[ext].hl
+    else
+        return nil, nil
+    end
 end
 
 function M.get_icon_color(name, ext, opts)
