@@ -1,6 +1,5 @@
 local M = {}
 
-M.status = false
 M.config = {}
 M.lookup = {
     stem = {},
@@ -14,7 +13,9 @@ end
 
 function M.load()
     -- sub web-devicons
-    package.loaded["nvim-web-devicons"] = require("easy-icons")
+    if not vim.g.easy_icons_loaded then
+        package.loaded["nvim-web-devicons"] = require("easy-icons")
+    end
 
     -- build lut
     for kind, items in pairs(M.config) do
@@ -31,7 +32,7 @@ function M.load()
 end
 
 function M.has_loaded()
-    return M.status
+    return vim.g.easy_icons_loaded
 end
 
 function M.get_icon(name, ext, opts)
