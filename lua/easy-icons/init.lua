@@ -14,7 +14,7 @@ end
 
 function M.load()
     -- sub web-devicons
-    if not vim.g.easy_icons_loaded then
+    if not vim.g.loaded_easy_icons then
         package.loaded["nvim-web-devicons"] = require("easy-icons")
     end
 
@@ -40,10 +40,6 @@ function M.has_loaded()
 end
 
 function M.get_icon(name, ext, opts)
-    if ext == "lua" then
-        return "X", "#000000"
-    end
-
     local stem = ""
     local pre = name:match("^(.*)%.")
     if pre and pre ~= "" then
