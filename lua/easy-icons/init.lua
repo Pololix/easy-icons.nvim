@@ -28,11 +28,11 @@ function M.load()
         end
     end
 
-    M.status = true
+    vim.g.loaded_easy_icons = true
 end
 
 function M.has_loaded()
-    return vim.g.easy_icons_loaded
+    return vim.g.loaded_easy_icons
 end
 
 function M.get_icon(name, ext, opts)
