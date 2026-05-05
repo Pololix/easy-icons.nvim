@@ -24,7 +24,7 @@ function M.load()
     end
 
     for stem, desc in pairs(M.opts.stem) do
-        local pattern = "^" .. stem:gsub("%%", ".+") .. "%..+$"
+        local pattern = "^" .. stem:gsub("%%", ".+") .. "%."
         M.lookup.stem[pattern] = desc
     end
 
@@ -52,8 +52,8 @@ function M.get_icon(name, ext, _)
     end
 end
 
-function M.get_icon_color(name, ext, _)
-    local icon, hl = M.get_icon(name, ext)
+function M.get_icon_color(name, ext, opts)
+    local icon, hl = M.get_icon(name, ext, opts)
 
     if not icon then
         return nil, nil
