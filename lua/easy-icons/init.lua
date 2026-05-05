@@ -29,7 +29,7 @@ function M.load()
     end
 
     for ext, desc in pairs(M.opts.ext) do
-        M.lookup.ext[ext] = desc
+        M.lookup.ext[ext] = M.resolve(desc, ext)
     end
 
     vim.g.loaded_easy_icons = true
