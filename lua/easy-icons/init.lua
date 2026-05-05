@@ -20,12 +20,12 @@ function M.load()
     M.lookup = { name = {}, stem = {}, ext = {} }
     for name, desc in pairs(M.opts.name) do
         local pattern = "^" .. name:gsub("%%", ".+") .. "$"
-        M.lookup.name[pattern] = desc
+        M.lookup.name[pattern] = M.resolve(desc, name)
     end
 
     for stem, desc in pairs(M.opts.stem) do
         local pattern = "^" .. stem:gsub("%%", ".+") .. "%."
-        M.lookup.stem[pattern] = desc
+        M.lookup.stem[pattern] = M.resolve(desc, stem)
     end
 
     for ext, desc in pairs(M.opts.ext) do
@@ -67,15 +67,19 @@ function M.get_icon_color(name, ext, opts)
         return icon, nil
     end
 
-    local hex = ""
-    if not hl:match("^#%x%x%x%x%x%x$") then
-        local hi = vim.api.nvim_get_hl(0, { name = hl, link = false })
-        hex = hi.fg and string.format("#%06x", hi.fg) or nil
-    else
-        hex = hl
-    end
+    local hi = vim.api.nvim_get_hl(0, { name = hl, link = false })
+    local hex = hi.fg and string.format("#%06x", hi.fg) or nil
 
     return icon, hex
+end
+
+function M.resolve(desc, entry)
+    if desc.hl:match("^#%x%x%x%x%x%x$") then
+        local hl = "EasyIcons_" .. entry
+        vim.api.nvim_set_hl(0, hl, { fg = desc.hl })
+        desc.hl = hl
+    end
+    return desc
 end
 
 return M
