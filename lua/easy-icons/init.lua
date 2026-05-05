@@ -1,19 +1,59 @@
-local M = {}
+local M  = {}
 
-M.lookup = {}
-M.otps = {}
+M.lookup = {
+    name = {},
+    stem = {},
+    ext  = {}
+}
+M.opts   = {
+    name = {},
+    stem = {},
+    ext  = {}
+}
 
 function M.setup(opts)
+    M.opts = vim.tbl_deep_extend("force", M.opts, opts or {})
+    M.load()
 end
 
 function M.load()
+    M.lookup = { name = {}, stem = {}, ext  = {} }
+    for name, desc in pairs(M.opts.name) do
+        local pattern = "^" .. name:gsub("%%", ".+") .. "$"
+        M.lookup.name[pattern] = desc
+    end
+
+    for stem, desc in pairs(M.opts.stem) do
+        local pattern = "^" .. stem:gsub("%%", ".+") .. "%..+$"
+        M.lookup.stem[pattern] = desc
+    end
+
+    for ext, desc in pairs(M.opts.ext) do
+        M.lookup.ext[ext] = desc
+    end
+
+    vim.g.loaded_easy_icons = true
 end
 
-function M.get_icon(name, ext, opts)
+function M.has_loaded()
+    return vim.g.loaded_easy_icons
 end
 
-function M.get_icon_color(name, ext, opts)
-    local icon, hl = M.get_icon(name, ext, opts)
+function M.get_icon(name, ext, _)
+    for pattern, desc in pairs(M.lookup.name) do
+        if name:match(pattern) then return desc.icon, desc.hl end
+    end
+    for pattern, desc in pairs(M.lookup.stem) do
+        if name:match(pattern) then return desc.icon, desc.hl end
+    end
+
+    if M.lookup.ext[ext] then
+        return M.lookup.ext[ext].icon, M.lookup.ext[ext].hl
+    end
+end
+
+function M.get_icon_color(name, ext, _)
+    local icon, hl = M.get_icon(name, ext)
 
     if not icon then
         return nil, nil
