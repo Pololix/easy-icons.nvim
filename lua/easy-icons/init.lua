@@ -67,8 +67,13 @@ function M.get_icon_color(name, ext, opts)
         return icon, nil
     end
 
-    local hi = vim.api.nvim_get_hl(0, { name = hl, link = false })
-    local hex = hi.fg and string.format("#%06x", hi.fg) or nil
+    local hex = ""
+    if not hl:match("#%06x") then
+        local hi = vim.api.nvim_get_hl(0, { name = hl, link = false })
+        hex = hi.fg and string.format("#%06x", hi.fg) or nil
+    else
+        hex = hl
+    end
 
     return icon, hex
 end
