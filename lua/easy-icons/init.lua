@@ -17,7 +17,7 @@ function M.setup(opts)
 end
 
 function M.load()
-    M.lookup = { name = {}, stem = {}, ext  = {} }
+    M.lookup = { name = {}, stem = {}, ext = {} }
     for name, desc in pairs(M.opts.name) do
         local pattern = "^" .. name:gsub("%%", ".+") .. "$"
         M.lookup.name[pattern] = desc
@@ -41,10 +41,14 @@ end
 
 function M.get_icon(name, ext, _)
     for pattern, desc in pairs(M.lookup.name) do
-        if name:match(pattern) then return desc.icon, desc.hl end
+        if name:match(pattern) then
+            return desc.icon, desc.hl
+        end
     end
     for pattern, desc in pairs(M.lookup.stem) do
-        if name:match(pattern) then return desc.icon, desc.hl end
+        if name:match(pattern) then
+            return desc.icon, desc.hl
+        end
     end
 
     if M.lookup.ext[ext] then
@@ -63,8 +67,13 @@ function M.get_icon_color(name, ext, opts)
         return icon, nil
     end
 
-    local hi = vim.api.nvim_get_hl(0, { name = hl, link = false })
-    local hex = hi.fg and string.format("#%06x", hi.fg) or nil
+    local hex = ""
+    if not hl:match("#%06x") then
+        local hi = vim.api.nvim_get_hl(0, { name = hl, link = false })
+        hex = hi.fg and string.format("#%06x", hi.fg) or nil
+    else
+        hex = hl
+    end
 
     return icon, hex
 end
