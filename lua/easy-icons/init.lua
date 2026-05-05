@@ -39,7 +39,7 @@ function M.has_loaded()
     return vim.g.loaded_easy_icons
 end
 
-function M.get_icon(name, ext, _)
+function M.get_icon(name, _, _)
     for pattern, desc in pairs(M.lookup.name) do
         if name:match(pattern) then
             return desc.icon, desc.hl
@@ -51,8 +51,10 @@ function M.get_icon(name, ext, _)
         end
     end
 
-    if M.lookup.ext[ext] then
-        return M.lookup.ext[ext].icon, M.lookup.ext[ext].hl
+    local ext = name:match(".*%.(.+)$")
+    local lt  = M.lookup.ext[ext]
+    if lt then
+        return lt.icon, lt.hl
     end
 end
 
@@ -61,19 +63,12 @@ function M.get_icon_color(name, ext, opts)
 
     if not icon then
         return nil, nil
-    end
-
-    if not hl then
+    elseif not hl then
         return icon, nil
     end
 
-    local hex = ""
-    if not hl:match("#%06x") then
-        local hi = vim.api.nvim_get_hl(0, { name = hl, link = false })
-        hex = hi.fg and string.format("#%06x", hi.fg) or nil
-    else
-        hex = hl
-    end
+    local hi = vim.api.nvim_get_hl(0, { name = hl, link = false })
+    local hex = hi.fg and string.format("#%06x", hi.fg) or nil
 
     return icon, hex
 end
