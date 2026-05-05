@@ -19,13 +19,11 @@ end
 function M.load()
     M.lookup = { name = {}, stem = {}, ext = {} }
     for name, desc in pairs(M.opts.name) do
-        local pattern = "^" .. name:gsub("%%", ".+") .. "$"
-        M.lookup.name[pattern] = M.resolve(desc, name)
+        M.lookup.name[M.create_pattern(name, true)] = M.resolve(desc, name)
     end
 
     for stem, desc in pairs(M.opts.stem) do
-        local pattern = "^" .. stem:gsub("%%", ".+") .. "%."
-        M.lookup.stem[pattern] = M.resolve(desc, stem)
+        M.lookup.stem[M.create_pattern(stem, false)] = M.resolve(desc, stem)
     end
 
     for ext, desc in pairs(M.opts.ext) do
@@ -71,6 +69,18 @@ function M.get_icon_color(name, ext, opts)
     local hex = hi.fg and string.format("#%06x", hi.fg) or nil
 
     return icon, hex
+end
+
+function M.create_pattern(input, cap)
+    input = input:gsub("([%.%+%-%*%?%[%]%^%$%(%)%%])", "%%%1")
+    input = input:gsub("%%%%", ".+")
+
+    local cap_char = "$"
+    if not cap then
+        cap_char = "%."
+    end
+
+    return "^" .. input .. cap_char
 end
 
 function M.resolve(desc, entry)
