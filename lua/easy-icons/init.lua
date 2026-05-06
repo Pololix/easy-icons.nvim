@@ -73,7 +73,7 @@ end
 
 function M.create_pattern(input, cap)
     input = input:gsub("([%.%+%-%*%?%[%]%^%$%(%)%%])", "%%%1")
-    input = input:gsub("%%%%", ".+")
+    input = input:gsub("%%%%", ".*")
 
     local cap_char = "$"
     if not cap then
