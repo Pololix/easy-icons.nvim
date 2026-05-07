@@ -85,7 +85,7 @@ function M.create_pattern(input, cap)
 end
 
 function M.resolve(desc, entry)
-    if desc.hl:match("^#%x%x%x%x%x%x$") then
+    if (desc.hl):match("^#%x%x%x%x%x%x$") then
         entry = entry:gsub("[^%w]", "")
         local hl = "EasyIcons_" .. entry
         vim.api.nvim_set_hl(0, hl, { fg = desc.hl })
