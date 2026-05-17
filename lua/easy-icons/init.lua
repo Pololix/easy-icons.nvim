@@ -1,14 +1,16 @@
-local M  = {}
+local M = {}
 
 M.lookup = {
     name = {},
     stem = {},
-    ext  = {}
+    ext = {},
+    cat = {},
 }
-M.opts   = {
+M.opts = {
     name = {},
     stem = {},
-    ext  = {}
+    ext = {},
+    cat = {},
 }
 
 function M.setup(opts)
@@ -17,7 +19,8 @@ function M.setup(opts)
 end
 
 function M.load()
-    M.lookup = { name = {}, stem = {}, ext = {} }
+    M.lookup = { name = {}, stem = {}, ext = {}, cat = {} }
+
     for name, desc in pairs(M.opts.name) do
         M.lookup.name[M.create_pattern(name, true)] = M.resolve(desc, name)
     end
@@ -28,6 +31,10 @@ function M.load()
 
     for ext, desc in pairs(M.opts.ext) do
         M.lookup.ext[ext] = M.resolve(desc, ext)
+    end
+
+    for cat, desc in pairs(M.opts.ext) do
+        M.lookup.cat[cat] = M.resolve(desc, cat)
     end
 
     vim.g.loaded_easy_icons = true
@@ -50,7 +57,14 @@ function M.get_icon(name, _, _)
     end
 
     local ext = name:match(".*%.(.+)$")
-    local lt  = M.lookup.ext[ext]
+    local lt = M.lookup.ext[ext]
+    if lt then
+        return lt.icon, lt.hl
+    end
+end
+
+function M.get_icon_from_cat(cat)
+    local lt = M.lookup.cat[cat]
     if lt then
         return lt.icon, lt.hl
     end
@@ -91,6 +105,7 @@ function M.resolve(desc, entry)
         vim.api.nvim_set_hl(0, hl, { fg = desc.hl })
         desc.hl = hl
     end
+
     return desc
 end
 
