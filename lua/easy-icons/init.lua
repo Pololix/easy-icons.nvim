@@ -4,13 +4,11 @@ M.lookup = {
     name = {},
     stem = {},
     ext = {},
-    cat = {},
 }
 M.opts = {
     name = {},
     stem = {},
     ext = {},
-    cat = {},
 }
 
 function M.setup(opts)
@@ -31,10 +29,6 @@ function M.load()
 
     for ext, desc in pairs(M.opts.ext) do
         M.lookup.ext[ext] = M.resolve(desc, ext)
-    end
-
-    for cat, desc in pairs(M.opts.ext) do
-        M.lookup.cat[cat] = M.resolve(desc, cat)
     end
 
     vim.g.loaded_easy_icons = true
@@ -58,13 +52,6 @@ function M.get_icon(name, _, _)
 
     local ext = name:match(".*%.(.+)$")
     local lt = M.lookup.ext[ext]
-    if lt then
-        return lt.icon, lt.hl
-    end
-end
-
-function M.get_icon_from_cat(cat)
-    local lt = M.lookup.cat[cat]
     if lt then
         return lt.icon, lt.hl
     end
