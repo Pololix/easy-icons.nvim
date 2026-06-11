@@ -91,19 +91,6 @@ function M.create_pattern(input, cap)
     return "^" .. input .. cap_char
 end
 
-function M.create_pattern(input, cap)
-    input = input:gsub("([%.%+%-%*%?%[%]%^%$%(%)%%])", "%%%1")
-    input = input:gsub("%$", ".+") -- $ defines a rule (mandatory)
-    input = input:gsub("&", ".*") -- & defines a posibily (optional)
-
-    local cap_char = "$"
-    if not cap then
-        cap_char = "%."
-    end
-
-    return "^" .. input .. cap_char
-end
-
 function M.resolve(desc, entry)
     if type(desc.hl) == "string" and desc.hl:match("^#%x%x%x%x%x%x$") then
         entry = entry:gsub("[^%w]", "")
