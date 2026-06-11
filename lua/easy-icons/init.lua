@@ -73,6 +73,25 @@ function M.get_icon_color(name, ext, opts)
 end
 
 function M.create_pattern(input, cap)
+    input = input:gsub("%$", "_PLACEHOLDER_MAND_")
+    input = input:gsub("&", "_PLACEHOLDER_OPT_")
+
+    input = input:gsub("([%.%+%-%*%?%[%]%^%$%(%)%%])", "%%%1")
+
+    -- $ defines that there needs to be something (mandatory),
+    -- & defines that it might be somethinng (optional)
+    input = input:gsub("_PLACEHOLDER_MAND_", ".+")
+    input = input:gsub("_PLACEHOLDER_OPT_", ".*")
+
+    local cap_char = "$"
+    if not cap then
+        cap_char = "%."
+    end
+
+    return "^" .. input .. cap_char
+end
+
+function M.create_pattern(input, cap)
     input = input:gsub("([%.%+%-%*%?%[%]%^%$%(%)%%])", "%%%1")
     input = input:gsub("%$", ".+") -- $ defines a rule (mandatory)
     input = input:gsub("&", ".*") -- & defines a posibily (optional)
