@@ -17,7 +17,7 @@ function M.setup(opts)
 end
 
 function M.load()
-    M.lookup = { name = {}, stem = {}, ext = {}, cat = {} }
+    M.lookup = { name = {}, stem = {}, ext = {} }
 
     for name, desc in pairs(M.opts.name) do
         M.lookup.name[M.create_pattern(name, true)] = M.resolve(desc, name)
